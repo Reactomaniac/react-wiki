@@ -4,18 +4,22 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:js": "browserify ./src/app.js -t [ babelify --optional es7.classProperties ] --outfile public/all.js",
+    "build": "watch 'npm run build:js' ./src"
   },
   "author": "Junaid Farooq",
   "license": "ISC",
   "devDependencies": {
-    "express": "^4.16.3"
+    "babelify": "^6.2.0",
+    "browserify": "^11.0.1",
+    "watch": "^1.0.2"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.6.1",
     "express-session": "^1.15.6",
+    "express": "^4.16.3",
     "firebase": "^2.4.2",
     "crypto": "*"
   }
