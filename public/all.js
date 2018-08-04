@@ -23356,6 +23356,10 @@ var _Login = require("./Login");
 
 var _Login2 = _interopRequireDefault(_Login);
 
+var _PageList = require("./PageList");
+
+var _PageList2 = _interopRequireDefault(_PageList);
+
 var App = (function (_React$Component) {
   _inherits(App, _React$Component);
 
@@ -23391,7 +23395,7 @@ var App = (function (_React$Component) {
               " Wicker "
             ),
             _react2["default"].createElement(_Login2["default"], { user: this.state.user, setUser: this.setUser }),
-            "PageList"
+            _react2["default"].createElement(_PageList2["default"], { user: this.state.user })
           ),
           _react2["default"].createElement(
             "div",
@@ -23409,7 +23413,7 @@ var App = (function (_React$Component) {
 exports["default"] = App;
 module.exports = exports["default"];
 
-},{"./Login":203,"react":199,"react-router":29}],203:[function(require,module,exports){
+},{"./Login":203,"./PageList":204,"react":199,"react-router":29}],203:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -23531,6 +23535,80 @@ var Login = (function (_React$Component) {
 })(_react2["default"].Component);
 
 exports["default"] = Login;
+module.exports = exports["default"];
+
+},{"../api":200,"react":199}],204:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _api = require("../api");
+
+var API = _interopRequireWildcard(_api);
+
+var PageList = (function (_React$Component) {
+  _inherits(PageList, _React$Component);
+
+  function PageList() {
+    var _this = this;
+
+    _classCallCheck(this, PageList);
+
+    _get(Object.getPrototypeOf(PageList.prototype), "constructor", this).apply(this, arguments);
+
+    this.state = {
+      newPageTitle: ""
+    };
+
+    this.update = function (evt) {
+      return _this.setState({ newPageTitle: evt.target.value });
+    };
+
+    this.createPage = function (evt) {
+      if (evt.charCode !== 13) return;
+      API.pages.push({ title: _this.state.newPageTitle });
+      _this.setState({ newPageTitle: "" });
+    };
+  }
+
+  _createClass(PageList, [{
+    key: "render",
+    value: function render() {
+      return _react2["default"].createElement(
+        "div",
+        null,
+        this.props.user ? _react2["default"].createElement("input", { type: "text",
+          className: "u-full-width",
+          value: this.state.newPageTitle,
+          placeholder: "New Page Title",
+          onChange: this.update,
+          onKeyPress: this.createPage }) : null
+      );
+    }
+  }]);
+
+  return PageList;
+})(_react2["default"].Component);
+
+exports["default"] = PageList;
 module.exports = exports["default"];
 
 },{"../api":200,"react":199}]},{},[201]);
