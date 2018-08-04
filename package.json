@@ -17,10 +17,12 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
+    "crypto": "*",
     "ejs": "^2.6.1",
-    "express-session": "^1.15.6",
     "express": "^4.16.3",
+    "express-session": "^1.15.6",
     "firebase": "^2.4.2",
-    "crypto": "*"
+    "react": "^0.13.3",
+    "react-router": "^0.13.6"
   }
 }
