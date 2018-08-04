@@ -23323,7 +23323,11 @@ var _componentsApp2 = _interopRequireDefault(_componentsApp);
 
 var Route = _reactRouter2["default"].Route;
 
-var routes = _react2["default"].createElement(Route, { handler: _componentsApp2["default"] });
+var routes = _react2["default"].createElement(
+  Route,
+  { handler: _componentsApp2["default"] },
+  _react2["default"].createElement(Route, { name: "page", path: "/page/:id", handler: _componentsApp2["default"] })
+);
 
 _reactRouter2["default"].run(routes, _reactRouter2["default"].HistoryLocation, function (Root) {
   return _react2["default"].render(_react2["default"].createElement(Root, null), document.getElementById('app'));
@@ -23564,6 +23568,8 @@ var _api = require("../api");
 
 var API = _interopRequireWildcard(_api);
 
+var _reactRouter = require("react-router");
+
 var PageList = (function (_React$Component) {
   _inherits(PageList, _React$Component);
 
@@ -23575,7 +23581,9 @@ var PageList = (function (_React$Component) {
     _get(Object.getPrototypeOf(PageList.prototype), "constructor", this).apply(this, arguments);
 
     this.state = {
-      newPageTitle: ""
+      loaded: false,
+      newPageTitle: "",
+      pages: {}
     };
 
     this.update = function (evt) {
@@ -23590,11 +23598,56 @@ var PageList = (function (_React$Component) {
   }
 
   _createClass(PageList, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      API.pages.on("value", function (ss) {
+        return _this2.setState({
+          pages: ss.exportVal() || [],
+          loaded: true
+        });
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
+      var _this3 = this;
+
+      var items = this.state.loaded ? Object.keys(this.state.pages).map(function (id) {
+        return _react2["default"].createElement(
+          "li",
+          { key: id },
+          _react2["default"].createElement(
+            _reactRouter.Link,
+            { to: "page", params: { id: id } },
+            " ",
+            _this3.state.pages[id].title,
+            " "
+          )
+        );
+      }) : [_react2["default"].createElement(
+        "li",
+        { key: "loading" },
+        " ",
+        _react2["default"].createElement(
+          "em",
+          null,
+          " Loading... "
+        ),
+        " "
+      )];
+
       return _react2["default"].createElement(
         "div",
         null,
+        _react2["default"].createElement(
+          "ul",
+          null,
+          " ",
+          items,
+          " "
+        ),
         this.props.user ? _react2["default"].createElement("input", { type: "text",
           className: "u-full-width",
           value: this.state.newPageTitle,
@@ -23611,4 +23664,4 @@ var PageList = (function (_React$Component) {
 exports["default"] = PageList;
 module.exports = exports["default"];
 
-},{"../api":200,"react":199}]},{},[201]);
+},{"../api":200,"react":199,"react-router":29}]},{},[201]);
