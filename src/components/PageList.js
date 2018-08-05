@@ -10,6 +10,11 @@ export default class PageList extends React.Component {
     pages: {}
   }
 
+  constructor (props, context) {
+    super(props, context)
+    this.context = context;
+  }
+
   componentDidMount() {
     API.pages.on("value", ss => this.setState({
       pages: ss.exportVal() || [],
@@ -42,7 +47,12 @@ export default class PageList extends React.Component {
   update = evt => this.setState({ newPageTitle: evt.target.value });
   createPage = evt => {
     if (evt.charCode !== 13) return;
-    API.pages.push({ title: this.state.newPageTitle });
+    var id = API.pages.push({ title: this.state.newPageTitle });
+    this.context.router.transitionTo("page", {id: id.key() });
     this.setState({ newPageTitle: "" });
   }
 }
+
+PageList.contextTypes = {
+  router: React.PropTypes.func.isRequired
+};

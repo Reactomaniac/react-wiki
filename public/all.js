@@ -26064,13 +26064,12 @@ var _reactRouter = require("react-router");
 var PageList = (function (_React$Component) {
   _inherits(PageList, _React$Component);
 
-  function PageList() {
+  function PageList(props, context) {
     var _this = this;
 
     _classCallCheck(this, PageList);
 
-    _get(Object.getPrototypeOf(PageList.prototype), "constructor", this).apply(this, arguments);
-
+    _get(Object.getPrototypeOf(PageList.prototype), "constructor", this).call(this, props, context);
     this.state = {
       loaded: false,
       newPageTitle: "",
@@ -26083,9 +26082,12 @@ var PageList = (function (_React$Component) {
 
     this.createPage = function (evt) {
       if (evt.charCode !== 13) return;
-      API.pages.push({ title: _this.state.newPageTitle });
+      var id = API.pages.push({ title: _this.state.newPageTitle });
+      _this.context.router.transitionTo("page", { id: id.key() });
       _this.setState({ newPageTitle: "" });
     };
+
+    this.context = context;
   }
 
   _createClass(PageList, [{
@@ -26153,6 +26155,10 @@ var PageList = (function (_React$Component) {
 })(_react2["default"].Component);
 
 exports["default"] = PageList;
+
+PageList.contextTypes = {
+  router: _react2["default"].PropTypes.func.isRequired
+};
 module.exports = exports["default"];
 
 },{"../api":205,"react":202,"react-router":32}],211:[function(require,module,exports){
@@ -26220,7 +26226,7 @@ var Section = (function (_React$Component) {
     this.startEditing = function (evt) {
       if (evt.target.tagName === "A") {
         var href = evt.target.getAttribute("href");
-        if (href.indexOf("/page/") > -1) {
+        if (href.indexOf("/page/") === 0) {
           _this.context.router.transitionTo(href);
           return evt.preventDefault();
         }
@@ -26255,12 +26261,17 @@ var Section = (function (_React$Component) {
       });
     }
   }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps, prevState) {
+      if (this.state.editing) _react2["default"].findDOMNode(this.refs.editor).focus();
+    }
+  }, {
     key: "render",
     value: function render() {
       var content = undefined;
 
       if (this.state.editing) {
-        content = _react2["default"].createElement("textarea", { className: "twelve columns",
+        content = _react2["default"].createElement("textarea", { ref: "editor", className: "twelve columns",
           defaultValue: this.state.content,
           onChange: this.updateContent,
           onBlur: this.save });
