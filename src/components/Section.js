@@ -4,8 +4,9 @@ import * as API from "../api";
 
 export default class Section extends React.Component {
 
-  constructor (props) {
-    super(props);
+  constructor (props, context) {
+    super(props, context);
+    this.context = context;
     this.state = this.getState(props);
   }
 
@@ -24,8 +25,7 @@ export default class Section extends React.Component {
 
   render () {
     let content;
-    console.log(this.state);
-    // let content = <span dangerouslySetInnerHTML={{ __html: this.state.html }} />;
+
     if (this.state.editing) {
       content = <textarea className="twelve columns"
                           defaultValue={this.state.content}
@@ -48,7 +48,7 @@ export default class Section extends React.Component {
   updateContent = evt => this.setState({ content: evt.target.value });
 
   save = evt => {
-    console.log("I am called");
+
     this.setState({ editing: false });
 
     API.pages.child(this.props.path).update({
@@ -58,10 +58,17 @@ export default class Section extends React.Component {
   }
 
   startEditing = evt => {
-    if (!this.props.user || this.state.editing) return;
+    if (evt.target.tagName === "A") {
+      return;
+    }
+    if (!this.props.user || this.state.editing || this.state.locked) return;
     this.setState({ editing: true });
     API.pages.child(this.props.path).update({
       editor: this.props.user.username
     })
   }
+}
+
+Section.contextTypes = {
+  router: React.PropTypes.func.isRequired
 }

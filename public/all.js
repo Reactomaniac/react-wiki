@@ -26187,12 +26187,12 @@ var API = _interopRequireWildcard(_api);
 var Section = (function (_React$Component) {
   _inherits(Section, _React$Component);
 
-  function Section(props) {
+  function Section(props, context) {
     var _this = this;
 
     _classCallCheck(this, Section);
 
-    _get(Object.getPrototypeOf(Section.prototype), "constructor", this).call(this, props);
+    _get(Object.getPrototypeOf(Section.prototype), "constructor", this).call(this, props, context);
 
     this.getState = function (props) {
       return {
@@ -26208,7 +26208,7 @@ var Section = (function (_React$Component) {
     };
 
     this.save = function (evt) {
-      console.log("I am called");
+
       _this.setState({ editing: false });
 
       API.pages.child(_this.props.path).update({
@@ -26218,13 +26218,17 @@ var Section = (function (_React$Component) {
     };
 
     this.startEditing = function (evt) {
-      if (!_this.props.user || _this.state.editing) return;
+      if (evt.target.tagName === "A") {
+        return;
+      }
+      if (!_this.props.user || _this.state.editing || _this.state.locked) return;
       _this.setState({ editing: true });
       API.pages.child(_this.props.path).update({
         editor: _this.props.user.username
       });
     };
 
+    this.context = context;
     this.state = this.getState(props);
   }
 
@@ -26239,8 +26243,7 @@ var Section = (function (_React$Component) {
     key: "render",
     value: function render() {
       var content = undefined;
-      console.log(this.state);
-      // let content = <span dangerouslySetInnerHTML={{ __html: this.state.html }} />;
+
       if (this.state.editing) {
         content = _react2["default"].createElement("textarea", { className: "twelve columns",
           defaultValue: this.state.content,
@@ -26267,6 +26270,10 @@ var Section = (function (_React$Component) {
 })(_react2["default"].Component);
 
 exports["default"] = Section;
+
+Section.contextTypes = {
+  router: _react2["default"].PropTypes.func.isRequired
+};
 module.exports = exports["default"];
 
 },{"../api":205,"markdown":5,"react":202}]},{},[206]);
