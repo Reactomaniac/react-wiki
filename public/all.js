@@ -26196,6 +26196,7 @@ var Section = (function (_React$Component) {
 
     this.getState = function (props) {
       return {
+        locked: props.user && props.section.editor && props.user.username !== props.section.editor,
         editing: props.user && props.user.username === props.section.editor,
         content: props.section.content,
         html: props.section.content ? _markdown.markdown.toHTML(props.section.content) : ""
@@ -26252,7 +26253,7 @@ var Section = (function (_React$Component) {
       var classes = ["row", "section"];
 
       if (this.state.editing) classes.push("editing");
-      if (this.props.user) classes.push("editable");
+      if (this.props.user) classes.push(this.state.locked ? "locked" : "editable");
 
       return _react2["default"].createElement(
         "section",
