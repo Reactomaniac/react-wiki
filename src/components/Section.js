@@ -10,10 +10,17 @@ export default class Section extends React.Component {
     this.state = this.getState(props);
   }
 
+  componentDidMount() {
+    this.componentWillReceiveProps(this.props);
+  }
+
   componentWillReceiveProps(nextProps) {
     var state = this.getState(nextProps);
 
-    this.setState(state);
+    this.makeLinks(state.html, html => {
+      state.html = html;
+      this.setState(state);
+    });
   }
 
   getState = props => ({
@@ -59,6 +66,11 @@ export default class Section extends React.Component {
 
   startEditing = evt => {
     if (evt.target.tagName === "A") {
+      var href = evt.target.getAttribute("href");
+      if (href.indexOf("/page/") > -1) {
+        this.context.router.transitionTo(href);
+        return evt.preventDefault();
+      }
       return;
     }
     if (!this.props.user || this.state.editing || this.state.locked) return;
@@ -66,6 +78,21 @@ export default class Section extends React.Component {
     API.pages.child(this.props.path).update({
       editor: this.props.user.username
     })
+  }
+
+  makeLinks (html, callback) {
+    const anchor = /\[\[(.*)\]\]/g;
+
+    API.pages.once("value", snapshot => {
+      let pages = snapshot.exportVal();
+      let keys = Object.keys(pages);
+
+      callback(html.replace(anchor, (match, anchorText) => {
+        for (let key of keys)
+          if (pages[key].title === anchorText.trim())
+            return `<a href="/page/${key}">${anchorText}</a>`;
+      }));
+    });
   }
 }
 

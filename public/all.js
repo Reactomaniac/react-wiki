@@ -26219,6 +26219,11 @@ var Section = (function (_React$Component) {
 
     this.startEditing = function (evt) {
       if (evt.target.tagName === "A") {
+        var href = evt.target.getAttribute("href");
+        if (href.indexOf("/page/") > -1) {
+          _this.context.router.transitionTo(href);
+          return evt.preventDefault();
+        }
         return;
       }
       if (!_this.props.user || _this.state.editing || _this.state.locked) return;
@@ -26233,11 +26238,21 @@ var Section = (function (_React$Component) {
   }
 
   _createClass(Section, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.componentWillReceiveProps(this.props);
+    }
+  }, {
     key: "componentWillReceiveProps",
     value: function componentWillReceiveProps(nextProps) {
+      var _this2 = this;
+
       var state = this.getState(nextProps);
 
-      this.setState(state);
+      this.makeLinks(state.html, function (html) {
+        state.html = html;
+        _this2.setState(state);
+      });
     }
   }, {
     key: "render",
@@ -26263,6 +26278,43 @@ var Section = (function (_React$Component) {
         { onClick: this.startEditing, className: classes.join(" ") },
         content
       );
+    }
+  }, {
+    key: "makeLinks",
+    value: function makeLinks(html, callback) {
+      var anchor = /\[\[(.*)\]\]/g;
+
+      API.pages.once("value", function (snapshot) {
+        var pages = snapshot.exportVal();
+        var keys = Object.keys(pages);
+
+        callback(html.replace(anchor, function (match, anchorText) {
+          var _iteratorNormalCompletion = true;
+          var _didIteratorError = false;
+          var _iteratorError = undefined;
+
+          try {
+            for (var _iterator = keys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+              var key = _step.value;
+
+              if (pages[key].title === anchorText.trim()) return "<a href=\"/page/" + key + "\">" + anchorText + "</a>";
+            }
+          } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion && _iterator["return"]) {
+                _iterator["return"]();
+              }
+            } finally {
+              if (_didIteratorError) {
+                throw _iteratorError;
+              }
+            }
+          }
+        }));
+      });
     }
   }]);
 
