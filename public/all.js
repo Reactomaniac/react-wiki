@@ -26196,7 +26196,7 @@ var Section = (function (_React$Component) {
 
     this.getState = function (props) {
       return {
-        editing: props.user && props.user.username == props.section.editor,
+        editing: props.user && props.user.username === props.section.editor,
         content: props.section.content,
         html: props.section.content ? _markdown.markdown.toHTML(props.section.content) : ""
       };
@@ -26207,6 +26207,7 @@ var Section = (function (_React$Component) {
     };
 
     this.save = function (evt) {
+      console.log("I am called");
       _this.setState({ editing: false });
 
       API.pages.child(_this.props.path).update({
@@ -26236,16 +26237,22 @@ var Section = (function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      console.log(this.state);
       var content = undefined;
+      console.log(this.state);
       // let content = <span dangerouslySetInnerHTML={{ __html: this.state.html }} />;
       if (this.state.editing) {
-        content = _react2["default"].createElement("textarea", { className: "twelve columns", defaultValue: this.state.content, onChange: this.updateContent });
+        content = _react2["default"].createElement("textarea", { className: "twelve columns",
+          defaultValue: this.state.content,
+          onChange: this.updateContent,
+          onBlur: this.save });
       } else {
         content = _react2["default"].createElement("span", { dangerouslySetInnerHTML: { __html: this.state.html } });
       }
 
       var classes = ["row", "section"];
+
+      if (this.state.editing) classes.push("editing");
+      if (this.props.user) classes.push("editable");
 
       return _react2["default"].createElement(
         "section",

@@ -31,7 +31,7 @@ export default class Page extends React.Component {
           Key={id}
           user={this.props.user}
           path={this.props.params.id + "/sections/" + id}
-          section={this.state.sections[id]}/>)
+          section={this.state.sections[id]} />)
       }
 
       if (this.props.user)
