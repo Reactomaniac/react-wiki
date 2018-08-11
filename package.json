@@ -24,5 +24,8 @@
     "markdown": "^0.5.0",
     "react": "^0.13.3",
     "react-router": "^0.13.6"
+  },
+  "engines": {
+    "node": "10.5.0"
   }
 }
