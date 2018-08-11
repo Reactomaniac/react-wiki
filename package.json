@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "build:js": "browserify ./src/app.js -t [ babelify --optional es7.classProperties ] --outfile public/all.js",
+    "build": "browserify ./src/app.js -t [ babelify --optional es7.classProperties ] --outfile public/all.js",
   },
   "author": "Junaid Farooq",
   "license": "ISC",
