@@ -1,8 +1,11 @@
 var Firebase = require("firebase");
 var crypto = require("crypto");
+var session = require('express-session');
 
 var firebase = new Firebase('https://wicker-dc371.firebaseio.com/');
 var users = firebase.child("users");
+
+var MemoryStore = require('session-memory-store')(session);
 
 function hash (password) {
   return crypto.createHash("sha512").update(password).digest("hex");
@@ -16,6 +19,7 @@ router.use(require("express-session")({
   resave: false,
   saveUninitialized: true,
   secret: "dsdsdagqwqgqdgdgdas;dsagadsgs"
+  store: new MemoryStore({expires: 60 * 60 * 12})
 }));
 
 
