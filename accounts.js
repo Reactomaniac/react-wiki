@@ -18,7 +18,7 @@ router.use(require("cookie-parser")());
 router.use(require("express-session")({
   resave: false,
   saveUninitialized: true,
-  secret: "dsdsdagqwqgqdgdgdas;dsagadsgs"
+  secret: "dsdsdagqwqgqdgdgdas;dsagadsgs",
   store: new MemoryStore({expires: 60 * 60 * 12})
 }));
 
