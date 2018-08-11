@@ -9,4 +9,4 @@ express()
       user: JSON.stringify(req.session.user || null)
     })
   })
-  .listen(3000);
+  .listen(process.env.PORT || 5000);
